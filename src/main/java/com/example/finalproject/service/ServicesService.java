@@ -35,4 +35,8 @@ public class ServicesService {
         return serviceTypeRepository.findByName(serviceName);
     }
 
+    public List<Services> findServiByOrderId(Integer id){
+        return serviceTypeRepository.findServicesByOrderId(id);
+    }
+
 }

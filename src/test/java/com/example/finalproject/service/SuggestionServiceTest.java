@@ -2,13 +2,15 @@ package com.example.finalproject.service;
 
 
 import com.example.finalproject.model.*;
+import com.example.finalproject.model.enums.OrderStatus;
+import com.example.finalproject.model.enums.ServicesTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,67 +29,55 @@ public class SuggestionServiceTest {
 
 
     @Test
-    public void testBestSuggestion(){
-        Technician technician1 = new Technician();
-        Technician technician2 = new Technician();
-        Technician technician3 = new Technician();
+    public void testSaveSuggestion(){
 
-        technician1.setFullName("Reza_Karimi");
-        technician2.setFullName("Hasan_Akbari");
-        technician3.setFullName("Bagher_Shakeri");
+//        Order foundOrder = orderService.findById(1).get();
+//        Technician technician1 = technicianService.findById(1).get();
+//        Technician technician2 = technicianService.findById(2).get();
+//        Technician technician3 = technicianService.findById(3).get();
 
-        technicianService.saveOrUpdate(technician1);
-        technicianService.saveOrUpdate(technician2);
-        technicianService.saveOrUpdate(technician3);
 
         Suggestion suggestion1 = Suggestion.builder()
-                .suggestedPrice(42000)
-                .technician(technician1)
+                .suggestedPrice(47000)
                 .build();
 
-        suggestionService.saveOrUpdate(suggestion1);
 
         Suggestion suggestion2 = Suggestion.builder()
-                .suggestedPrice(50000)
-                .technician(technician2)
+                .suggestedPrice(49000)
                 .build();
-
-        suggestionService.saveOrUpdate(suggestion2);
 
         Suggestion suggestion3 = Suggestion.builder()
-                .suggestedPrice(30000)
-                .technician(technician3)
+                .suggestedPrice(32000)
                 .build();
 
-        suggestionService.saveOrUpdate(suggestion3);
-
-        List<Suggestion> suggestionList = new ArrayList<>();
-        suggestionList.add(suggestion1);
-        suggestionList.add(suggestion2);
-        suggestionList.add(suggestion3);
-
-        Date todaysDate = new Date(120, 12, 28);
-
-        Order order1 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .endOfJob(todaysDate)
-                .suggestions(suggestionList)
-                .build();
-
-        orderService.saveOrUpdate(order1);
+        suggestionService.saveOrUpdate(suggestion1,1,1);
+        suggestionService.saveOrUpdate(suggestion2,1,2);
+        suggestionService.saveOrUpdate(suggestion3,1,3);
 
 
 
-        Technician thebestSuggestionForOrder = suggestionService.findThebestSuggestionForOrder(1);
-        String technicianFullName = thebestSuggestionForOrder.getFullName();
-        assertEquals(technicianFullName,"Bagher_Shakeri");
-
-
+//        Suggestion suggestion2 = Suggestion.builder()
+//                .suggestedPrice(50000)
+//                .order(foundOrder)
+//                .technician(technician2)
+//                .build();
+//
+//        suggestionService.saveOrUpdate(suggestion2);
+//
+//        Suggestion suggestion3 = Suggestion.builder()
+//                .suggestedPrice(30000)
+//                .technician(technician3)
+//                .order(foundOrder)
+//                .build();
+//
+//        suggestionService.saveOrUpdate(suggestion3);
     }
 
 
-
-
-
+    @Test
+    public void testBestSuggestion(){
+        Technician thebestSuggestionForOrder = suggestionService.findThebestSuggestionForOrder(1);
+        String technicianFullName = thebestSuggestionForOrder.getFullName();
+        assertEquals("Reza_Ahmadi",technicianFullName);
+    }
 }

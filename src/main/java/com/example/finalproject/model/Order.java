@@ -1,5 +1,7 @@
 package com.example.finalproject.model;
 
+import com.example.finalproject.model.enums.OrderStatus;
+import com.example.finalproject.model.enums.ServicesTypes;
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,19 +33,8 @@ public class Order {
 
     private String description;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "orders_services",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "service_id")}
-    )
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private Set<Services> services;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "customers_orders",
-            joinColumns = {@JoinColumn(name = "order_id")},
-            inverseJoinColumns = {@JoinColumn(name = "customer_id")}
-    )
-    private Set<Customer> customers;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
@@ -57,8 +48,7 @@ public class Order {
     @Column(name = "date_of_finishing_job")
     private Date endOfJob;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     private List<Suggestion> suggestions;
 
     private String address;

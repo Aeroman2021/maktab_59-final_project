@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface SuggestionRepository extends JpaRepository<Suggestion,Integer> {
 
-    @Query("SELECT s.technician from Suggestion  s where s.id = :orderId order by s.suggestedPrice asc")
+    @Query("SELECT s.technician from Suggestion  s where s.order.id = :orderId order by s.suggestedPrice asc")
     List<Technician> findBestTechForOrder(Integer orderId);
 
 

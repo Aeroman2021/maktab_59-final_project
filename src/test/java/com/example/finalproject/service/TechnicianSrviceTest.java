@@ -1,7 +1,7 @@
 package com.example.finalproject.service;
 
 
-import com.example.finalproject.model.RegisterStatus;
+import com.example.finalproject.model.enums.RegisterStatus;
 import com.example.finalproject.model.Technician;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

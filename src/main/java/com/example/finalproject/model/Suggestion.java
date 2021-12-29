@@ -1,5 +1,6 @@
 package com.example.finalproject.model;
 
+import com.example.finalproject.model.enums.SuggestionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class Suggestion {
     @ManyToOne
     private Technician technician;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Order order;
 
     @Enumerated(EnumType.STRING)

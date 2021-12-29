@@ -1,6 +1,6 @@
 package com.example.finalproject.service;
 
-import com.example.finalproject.model.RegisterStatus;
+import com.example.finalproject.model.enums.RegisterStatus;
 import com.example.finalproject.model.Technician;
 import com.example.finalproject.repository.TechnicianRepository;
 import lombok.RequiredArgsConstructor;

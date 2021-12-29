@@ -1,6 +1,7 @@
 package com.example.finalproject.model;
 
 
+import com.example.finalproject.model.enums.ServicesTypes;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class Services {
 
     @Column(name = "sub_service_name")
     private String subServiceName;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Order order;
 
     private Double price;
 

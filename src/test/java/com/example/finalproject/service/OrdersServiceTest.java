@@ -1,8 +1,8 @@
 package com.example.finalproject.service;
 
 import com.example.finalproject.model.Order;
-import com.example.finalproject.model.OrderStatus;
-import com.example.finalproject.model.ServicesTypes;
+import com.example.finalproject.model.enums.OrderStatus;
+import com.example.finalproject.model.enums.ServicesTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,15 +22,19 @@ public class OrdersServiceTest {
 
     @Test
     public void testSaveOrder_isOk() {
-        Order order = Order.builder()
-                .service(ServicesTypes.DECORATIONS)
+
+        Date todaysDate = new Date(120, 12, 28);
+        Order order1 = Order.builder()
+                .service(ServicesTypes.CLEANING)
+                .status(OrderStatus.STARTED_THE_PROCESS)
+                .registerDate(todaysDate)
                 .build();
+        orderService.saveOrUpdate(order1);
 
-        orderService.saveOrUpdate(order);
-
-        Order order1 = orderService.findById(1).get();
-        assertEquals(order.getService(), order1.getService());
+        Order result = orderService.findById(1).get();
+        assertEquals(result.getService(), order1.getService());
     }
+
 
     @Test
     public void testFindBySrrviceTypes() {

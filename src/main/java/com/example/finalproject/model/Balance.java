@@ -13,7 +13,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TransactionLIst {
+public class Balance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +21,12 @@ public class TransactionLIst {
 
     @Column(name = "transaction_date")
     private Date transactionDate;
+
+    @Column(name = "customer_current_blance")
+    private Double customerBalance;
+
+    @Column(name = "technecian_current_blance")
+    private Double TechnecianBalance;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;

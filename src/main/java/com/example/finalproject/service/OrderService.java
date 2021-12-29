@@ -1,9 +1,8 @@
 package com.example.finalproject.service;
 
 import com.example.finalproject.model.Order;
-import com.example.finalproject.model.OrderStatus;
-import com.example.finalproject.model.Services;
-import com.example.finalproject.model.ServicesTypes;
+import com.example.finalproject.model.enums.OrderStatus;
+import com.example.finalproject.model.enums.ServicesTypes;
 import com.example.finalproject.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

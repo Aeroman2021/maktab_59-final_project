@@ -1,6 +1,6 @@
 package com.example.finalproject.service;
 
-import com.example.finalproject.model.Transaction;
+import com.example.finalproject.model.Balance;
 import com.example.finalproject.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class TransactionService  {
     private final TransactionRepository transactionRepository;
 
-    public void saveOrUpdate(Transaction transaction){
+    public void saveOrUpdate(Balance transaction){
         transactionRepository.save(transaction);
     }
 
@@ -21,11 +21,11 @@ public class TransactionService  {
         transactionRepository.deleteById(id);
     }
 
-    public Optional<Transaction> findById(Integer id){
+    public Optional<Balance> findById(Integer id){
         return transactionRepository.findById(id);
     }
 
-    public List<Transaction> findAll (){
+    public List<Balance> findAll (){
         return  transactionRepository.findAll();
     }
 }

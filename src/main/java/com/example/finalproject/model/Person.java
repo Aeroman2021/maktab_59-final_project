@@ -1,19 +1,16 @@
 package com.example.finalproject.model;
 
+import com.example.finalproject.model.enums.RegisterStatus;
 import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.List;
 import java.util.Objects;
 
 @MappedSuperclass
 @Setter
 @Getter
 @ToString
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public  class Person {
 
     @Id

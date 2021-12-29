@@ -1,4 +1,4 @@
-package com.example.finalproject.model;
+package com.example.finalproject.model.enums;
 
 public enum OrderStatus {
     PENDING_FOR_TECHNICIAN_SUGGESTION,

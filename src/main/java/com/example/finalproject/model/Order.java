@@ -1,20 +1,17 @@
 package com.example.finalproject.model;
 
 import com.example.finalproject.model.enums.OrderStatus;
-import com.example.finalproject.model.enums.ServicesTypes;
 import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -26,15 +23,12 @@ public class Order {
     private Integer id;
 
     @Enumerated(EnumType.STRING)
-    private ServicesTypes service;
-
-    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     private String description;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    private Set<Services> services;
+    @ManyToOne
+    private SubServices subServices;
 
     @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
@@ -45,27 +39,49 @@ public class Order {
     @Column(name = "register_date")
     private Date registerDate;
 
-    @Column(name = "date_of_finishing_job")
-    private Date endOfJob;
+    @Column(name = "date_of_starting_job")
+    private Date startDate;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Suggestion> suggestions;
 
-    private String address;
+    @Embedded
+    private Address address;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Order)) return false;
-        Order orders = (Order) o;
-        return Double.compare(orders.getSuggestedPrice(), getSuggestedPrice()) == 0 &&
-                getService() == orders.getService() && getStatus() == orders.getStatus() &&
-                Objects.equals(getRegisterDate(), orders.getRegisterDate());
+        Order order = (Order) o;
+        return Double.compare(order.getSuggestedPrice(), getSuggestedPrice()) == 0 &&
+                getStatus() == order.getStatus() &&
+                this.getSubServices().equals(order.getSubServices()) &&
+                getCustomer().equals(order.getCustomer()) &&
+                getRegisterDate().equals(order.getRegisterDate()) &&
+                getStartDate().equals(order.getStartDate()) &&
+                getAddress().equals(order.getAddress());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getService(),
-                getStatus(), getSuggestedPrice(), getRegisterDate());
+        return Objects.hash(getStatus(), this.getSubServices(), getCustomer(), getSuggestedPrice(),
+                getRegisterDate(), getStartDate(), getAddress());
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                ", subServices=" + subServices +
+                ", customer=" + customer +
+                ", suggestedPrice=" + suggestedPrice +
+                ", registerDate=" + registerDate +
+                ", startDate=" + startDate +
+                ", suggestions=" + suggestions +
+                ", address=" + address +
+                '}';
     }
 }

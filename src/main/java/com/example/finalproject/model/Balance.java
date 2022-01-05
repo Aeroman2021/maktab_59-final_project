@@ -28,11 +28,10 @@ public class Balance {
     @Column(name = "technecian_current_blance")
     private Double TechnecianBalance;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Technician technician;
-
 
 }

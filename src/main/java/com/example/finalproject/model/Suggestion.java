@@ -1,16 +1,14 @@
 package com.example.finalproject.model;
 
 import com.example.finalproject.model.enums.SuggestionStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,9 +34,23 @@ public class Suggestion {
     @ManyToOne
     private Technician technician;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Order order;
 
     @Enumerated(EnumType.STRING)
-    private SuggestionStatus status;
+    private SuggestionStatus status = SuggestionStatus.Pending;
+
+    @Override
+    public String toString() {
+        return "Suggestion{" +
+                "id=" + id +
+                ", registerSuggestion=" + registerSuggestion +
+                ", suggestedPrice=" + suggestedPrice +
+                ", workDuration=" + workDuration +
+                ", startHour=" + startHour +
+                ", technician=" + technician +
+                ", order=" + order +
+                ", status=" + status +
+                '}';
+    }
 }

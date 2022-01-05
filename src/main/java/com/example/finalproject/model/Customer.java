@@ -1,6 +1,7 @@
 package com.example.finalproject.model;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.Hibernate;
 
 import javax.persistence.CascadeType;
@@ -13,16 +14,18 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "customers")
-public class Customer extends Person{
+public class Customer extends User {
 
-    private String address;
+    private Double credit;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<Order> orders;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<Balance> transactions;
 
     @Override
@@ -32,6 +35,8 @@ public class Customer extends Person{
         Customer customer = (Customer) o;
         return getId() != null && Objects.equals(getId(), customer.getId());
     }
+
+
 
     @Override
     public int hashCode() {

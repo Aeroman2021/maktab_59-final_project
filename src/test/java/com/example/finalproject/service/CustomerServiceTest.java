@@ -17,27 +17,11 @@ public class CustomerServiceTest {
     private CustomerService customerService;
 
     @Test
-    public void testSavePerson(){
-        Customer customer = new Customer();
-        customer.setFullName("Mohsen_Malakouti");
+    public void testChangePassword() {
+        Customer customer = customerService.loadById(1);
+        customerService.changePasswordById(1, "789456");
+        assertEquals("789456", customer.getPassword());
 
-
-        customerService.saveOrUpdate(customer);
-
-        Customer customer1 = customerService.findByName("Mohsen_Malakouti");
-        assertEquals(customer.getFullName(),customer1.getFullName());
-    }
-
-    @Test
-    public void testupdate(){
-        Optional<Customer> customer = customerService.findById(1);
-        customer.get().setPassword("123456");
-        customerService.saveOrUpdate(customer.get());
-    }
-
-    @Test
-    public  void testChangePassword(){
-        customerService.changePasswordById(1,"789456");
     }
 
 }

@@ -1,16 +1,14 @@
 package com.example.finalproject.service;
 
 
-import com.example.finalproject.model.*;
-import com.example.finalproject.model.enums.OrderStatus;
-import com.example.finalproject.model.enums.ServicesTypes;
+import com.example.finalproject.model.Order;
+import com.example.finalproject.model.Suggestion;
+import com.example.finalproject.model.Technician;
+import com.example.finalproject.model.enums.SuggestionStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,56 +26,43 @@ public class SuggestionServiceTest {
     private OrderService orderService;
 
 
+//    @Test
+//    public void testBestSuggestion(){
+//        Suggestion result = suggestionService.findThebestSuggestionForOrder(1);
+//        String fullName = result.getTechnician().getFullName();
+//        assertEquals("Reza_Ahmadi",fullName);
+//    }
+
     @Test
-    public void testSaveSuggestion(){
-
-//        Order foundOrder = orderService.findById(1).get();
-//        Technician technician1 = technicianService.findById(1).get();
-//        Technician technician2 = technicianService.findById(2).get();
-//        Technician technician3 = technicianService.findById(3).get();
-
-
-        Suggestion suggestion1 = Suggestion.builder()
-                .suggestedPrice(47000)
+    public void testSubmitSuggestion_isOK() {
+        Suggestion suggestion = Suggestion
+                .builder()
+                .suggestedPrice(70000)
+                .startHour(17)
+                .workDuration(36)
                 .build();
+        Suggestion suggestion1 = suggestionService.save(suggestion);
+        suggestionService.submitSuggestionByTechs(suggestion1, 1, 2);
+    }
 
+    @Test
+    public void testListSuggestionsBasedOnPrice_isOK() {
+        suggestionService.listTechBasedOnPriceSuggestion( 2);
+    }
 
-        Suggestion suggestion2 = Suggestion.builder()
-                .suggestedPrice(49000)
-                .build();
+    @Test
+    public void testListBasedOnPoints_isOK() {
+       suggestionService.listTechBasedOnPoints(2);
+    }
 
-        Suggestion suggestion3 = Suggestion.builder()
-                .suggestedPrice(32000)
-                .build();
+    @Test
+    public void testAcceptSuggestion_isOK(){
+        suggestionService.AcceptSuggestionByCust(2);
+        SuggestionStatus status = suggestionService.loadById(2).getStatus();
+        assertEquals(SuggestionStatus.Accepted,status);
 
-        suggestionService.saveOrUpdate(suggestion1,1,1);
-        suggestionService.saveOrUpdate(suggestion2,1,2);
-        suggestionService.saveOrUpdate(suggestion3,1,3);
-
-
-
-//        Suggestion suggestion2 = Suggestion.builder()
-//                .suggestedPrice(50000)
-//                .order(foundOrder)
-//                .technician(technician2)
-//                .build();
-//
-//        suggestionService.saveOrUpdate(suggestion2);
-//
-//        Suggestion suggestion3 = Suggestion.builder()
-//                .suggestedPrice(30000)
-//                .technician(technician3)
-//                .order(foundOrder)
-//                .build();
-//
-//        suggestionService.saveOrUpdate(suggestion3);
     }
 
 
-    @Test
-    public void testBestSuggestion(){
-        Technician thebestSuggestionForOrder = suggestionService.findThebestSuggestionForOrder(1);
-        String technicianFullName = thebestSuggestionForOrder.getFullName();
-        assertEquals("Reza_Ahmadi",technicianFullName);
-    }
+
 }

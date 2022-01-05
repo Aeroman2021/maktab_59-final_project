@@ -1,8 +1,7 @@
 package com.example.finalproject.service;
 
-import com.example.finalproject.model.Order;
+import com.example.finalproject.model.*;
 import com.example.finalproject.model.enums.OrderStatus;
-import com.example.finalproject.model.enums.ServicesTypes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @SpringBootTest
@@ -19,43 +19,17 @@ public class OrdersServiceTest {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CustomerService customerService;
 
-    @Test
-    public void testSaveOrder_isOk() {
+    @Autowired
+    private SubServicesService subServicesService;
 
-        Date todaysDate = new Date(120, 12, 28);
-        Order order1 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .registerDate(todaysDate)
-                .build();
-        orderService.saveOrUpdate(order1);
-
-        Order result = orderService.findById(1).get();
-        assertEquals(result.getService(), order1.getService());
-    }
-
-
-    @Test
-    public void testFindBySrrviceTypes() {
-        List<Order> orderList1 = orderService.findOrderByService(ServicesTypes.CLEANING);
-
-        assertNotNull(orderList1);
-    }
+    @Autowired
+    private MainServicesService mainServicesService;
 
     @Test
     public void testGetOrdersByStatus() {
-        Date todaysDate = new Date(120, 12, 28);
-        Order order1 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .suggestedPrice(45000)
-                .endOfJob(todaysDate)
-                .build();
-
-
-        orderService.saveOrUpdate(order1);
-
         List<Order> orderList1 = orderService.getOrdersByStatus(OrderStatus.STARTED_THE_PROCESS);
         assertNotNull(orderList1);
     }
@@ -63,51 +37,41 @@ public class OrdersServiceTest {
     @Test
     public void testListOrderByDate() {
         Date date1 = new Date(120, 12, 28);
-        Order order1 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .suggestedPrice(70000)
-                .endOfJob(date1)
-                .build();
-        Date date2 = new Date(120, 12, 27);
-        Order order2 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .suggestedPrice(60000)
-                .endOfJob(date2)
-                .build();
-
-        orderService.saveOrUpdate(order1);
-        orderService.saveOrUpdate(order2);
-
         List<Order> resultList = orderService.getOrdersByRegisterDate(date1);
         assertNotNull(resultList);
     }
 
     @Test
     public void testListOrderByPrice() {
-        Date todaysDate = new Date(120, 12, 28);
-        Order order1 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .suggestedPrice(70000)
-                .endOfJob(todaysDate)
-                .build();
-
-        Order order2 = Order.builder()
-                .service(ServicesTypes.CLEANING)
-                .status(OrderStatus.STARTED_THE_PROCESS)
-                .suggestedPrice(60000)
-                .endOfJob(todaysDate)
-                .build();
-
-        orderService.saveOrUpdate(order1);
-        orderService.saveOrUpdate(order2);
-
         List<Order> orderList = orderService.listOrdersBySuggestedPrice();
         double suggestedPrice = orderList.get(0).getSuggestedPrice();
-        assertEquals(70000, suggestedPrice);
+        assertEquals(50000, suggestedPrice);
+    }
+
+
+    @Test
+    public void submitAnOrder() {
+        Address address = Address.builder()
+                .Alley("Lale-19")
+                .city("Busher")
+                .houseNumber(7)
+                .province("Bushehr")
+                .street("Bisim")
+                .build();
+        Date date1 = new Date(122, 1, 4);
+        Date date2 = new Date(122, 1, 15);
+        Order order = Order.builder()
+                .registerDate(date1)
+                .startDate(date2)
+                .suggestedPrice(70000)
+                .address(address)
+                .build();
+        orderService.save(order);
+        orderService.submitOrder(order, 3, 2);
 
     }
+
+
+
 
 }

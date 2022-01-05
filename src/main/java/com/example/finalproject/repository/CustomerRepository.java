@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
 
-    @Query("SELECT c from Customer c where c.fullName=:fullname")
-    public Customer findByFullName(String fullname);
-
+    Customer findCustomerByFullName(String fullname);
 
     @Modifying
     @Query("UPDATE Customer c SET c.password = :password WHERE c.id = :id")

@@ -1,48 +1,70 @@
 package com.example.finalproject.service;
 
+import com.example.finalproject.Exceptions.DuplicateEntityException;
 import com.example.finalproject.model.Customer;
 import com.example.finalproject.repository.CustomerRepository;
+import com.example.finalproject.service.core.AbstractCRUD;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService  {
+public class CustomerService extends AbstractCRUD<Customer, Integer> {
 
     private final CustomerRepository customerRepository;
 
-    public void saveOrUpdate(Customer customer){
-        customerRepository.save(customer);
-
+    @PostConstruct
+    public void init() {
+        setJpaRepository(customerRepository);
     }
 
-    public void deleteById(Integer id){
-        customerRepository.deleteById(id);
-    }
 
-    public Optional<Customer> findById(Integer id){
-        return customerRepository.findById(id);
-    }
-
-    public Customer findByName(String fullname){
-        return customerRepository.findByFullName(fullname);
-    }
-
-    public List<Customer> findAll (){
-        return  customerRepository.findAll();
+    public Customer findByName(String fullname) {
+        return customerRepository.findCustomerByFullName(fullname);
     }
 
 
     @Transactional
-    public void changePasswordById(Integer id,String password){
-        customerRepository.updatePassById(id,password);
+    public void changePasswordById(Integer id, String password) {
+        Customer customer = customerRepository.findById(id).get();
+        customer.setPassword(password);
+        super.save(customer);
+
     }
-//
-//    public void changePasswordByFullname(String fulname,String password){
-//        customerRepository.updatePassByFullname(fulname,password);
-//    }
+
+    @Transactional
+    public Customer save(Customer customer) {
+        if (!customerIsValid(customer))
+            throw new DuplicateEntityException("The customer with given Email exist in the Database");
+
+        return super.save(customer);
+    }
+
+
+    public boolean customerIsValid(Customer customer) {
+        return (!emailIsExist(customer) && passwordIsValid(customer));
+    }
+
+    public boolean emailIsExist(Customer customer) {
+        for (Customer currentCustomer : customerRepository.findAll()) {
+            if (currentCustomer.getEmail().equals(customer.getEmail()))
+                return true;
+        }
+        return false;
+    }
+
+    public boolean passwordIsValid(Customer customer) {
+        if (customer.getPassword() == null)
+            return false;
+
+        String regex = "^(?=.*[0-9])(?=.*[a-z,A-Z]).{8,20}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(customer.getPassword());
+        return !matcher.matches();
+    }
 }
